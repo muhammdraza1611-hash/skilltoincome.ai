@@ -32,8 +32,17 @@ import re as _re
 class DynamicCORSMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: StarletteRequest, call_next):
         origin = request.headers.get("origin", "")
-        # Allow any localhost or 127.0.0.1 origin
-        allowed = bool(_re.match(r'https?://(localhost|127\.0\.0\.1)(:\d+)?$', origin))
+        # Allow localhost, 127.0.0.1, and railway.app domains
+        allowed = bool(
+            _re.match(r'https?://(localhost|127\.0\.0\.1)(:\d+)?$', origin) or
+            _re.match(r'https?://.*\.railway\.app$', origin) or
+            _re.match(r'https?://.*\.up\.railway\.app$', origin)
+        )
+        
+        # Also allow origins from ALLOWED_ORIGINS setting
+        allowed_origins = settings.ALLOWED_ORIGINS
+        if origin in allowed_origins or "*" in allowed_origins:
+            allowed = True
         
         if request.method == "OPTIONS":
             response = StarletteResponse(status_code=200)
@@ -75,6 +84,15 @@ async def health_check():
 @app.on_event("startup")
 async def startup_event():
     logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
+    # Auto-create database tables on startup
+    try:
+        from app.db.base import Base
+        from app.db.session import async_engine
+        async with async_engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("Database tables created/verified successfully")
+    except Exception as e:
+        logger.error(f"Database initialization error: {e}")
 
 
 @app.on_event("shutdown")
