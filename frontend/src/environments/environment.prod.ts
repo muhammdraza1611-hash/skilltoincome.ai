@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: '/api/v1',
+  apiUrl: 'https://skilltoincomeai-production.up.railway.app/api/v1',
   appName: 'SkillToIncome AI',
 };
