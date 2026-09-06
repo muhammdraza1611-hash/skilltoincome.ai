@@ -1,0 +1,70 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$cyan-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Inter,
+    density: 0,
+  ));
+}
+
+/* ── Design Tokens ── */
+:root {
+  --primary:        #00668c;
+  --primary-hover:  #005a7a;
+  --accent:         #71c4ef;
+  --green:          #4cbe7d;
+  --background:     #08111a;
+  --surface:        #0c1824;
+  --surface-2:      #101f2e;
+  --sidebar-bg:     #0a1520;
+  --text-primary:   rgba(255,255,255,.88);
+  --text-secondary: rgba(255,255,255,.48);
+  --border-color:   rgba(113,196,239,.1);
+  --hover-bg:       rgba(113,196,239,.06);
+  --primary-light:  rgba(0,102,140,.18);
+  --error:          #f87171;
+}
+
+/* keep dark-theme class as alias (toggled by AppStore) */
+.dark-theme {
+  --background:     #08111a;
+  --surface:        #0c1824;
+  --surface-2:      #101f2e;
+  --sidebar-bg:     #0a1520;
+  --text-primary:   rgba(255,255,255,.88);
+  --text-secondary: rgba(255,255,255,.48);
+  --border-color:   rgba(113,196,239,.1);
+  --hover-bg:       rgba(113,196,239,.06);
+  --primary-light:  rgba(0,102,140,.18);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  transition: background-color .3s, color .3s;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(113,196,239,.18); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(113,196,239,.35); }
+
+.gradient-text {
+  background: linear-gradient(135deg, #71c4ef, #00668c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

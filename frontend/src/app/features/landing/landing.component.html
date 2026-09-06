@@ -1,0 +1,928 @@
+<div class="landing">
+
+  <!-- ═══════════ NAVBAR ═══════════ -->
+  <nav class="nav" [class.scrolled]="scrolled">
+    <a class="nav-brand" routerLink="/">
+      <div class="brand-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#71c4ef" stroke="#71c4ef" stroke-width="1" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span>SkillToIncome <strong>AI</strong></span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#how-it-works" class="nl">How It Works</a>
+      <a href="#features"     class="nl">Features</a>
+      <a href="#journey"      class="nl">Journey</a>
+      <a href="#stats"        class="nl">Results</a>
+    </div>
+
+    <div class="nav-actions">
+      <a routerLink="/auth/login"    class="nav-ghost">Sign In</a>
+      <a routerLink="/auth/register" class="nav-cta">Get Started Free</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="hero">
+    <div class="particles">
+      @for (p of particles; track $index) {
+        <div class="particle" [style]="p.style"></div>
+      }
+    </div>
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+
+    <div class="hero-wrap" [class.visible]="heroVisible">
+      <!-- LEFT -->
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="live-dot"></span>
+          AI-Powered Career Platform &nbsp;·&nbsp; Now Live
+        </div>
+
+        <h1>
+          Turn Your Skills<br>
+          Into <span class="hl">Real Income</span>
+        </h1>
+
+        <p class="hero-sub">
+          Our AI analyses your skills, predicts your earning potential,
+          builds a personalised roadmap and guides you to your first
+          freelance client — step by step.
+        </p>
+
+        <div class="hero-btns">
+          <a routerLink="/auth/register" class="btn-primary">
+            Start for Free
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#how-it-works" class="btn-outline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <path d="M10 8l6 4-6 4V8z" fill="currentColor"/>
+            </svg>
+            See How It Works
+          </a>
+        </div>
+
+        <div class="hero-trust">
+          <div class="avatars">
+            @for (c of avatarColors; track $index) {
+              <div class="av" [style.background]="c">{{ $index + 1 }}</div>
+            }
+          </div>
+          <span>Joined by <b>10,000+</b> students this month</span>
+        </div>
+      </div>
+
+      <!-- RIGHT — animated dashboard preview -->
+      <div class="hero-right">
+        <div class="dash-card" [class.dash-alive]="heroVisible">
+
+          <!-- title bar -->
+          <div class="dash-titlebar">
+            <span class="tb-dot red"></span>
+            <span class="tb-dot amber"></span>
+            <span class="tb-dot green"></span>
+            <span class="tb-name">SkillToIncome Dashboard</span>
+            <span class="tb-live">
+              <span class="tb-live-dot"></span>live
+            </span>
+          </div>
+
+          <div class="dash-body">
+
+            <!-- ── AI Career Match ring ── -->
+            <div class="dash-tile ring-tile" [class.tile-on]="dashStep >= 1">
+              <p class="tile-label">AI Career Match</p>
+              <div class="ring-wrap">
+                <svg class="match-ring" viewBox="0 0 120 120">
+                  <!-- bg track -->
+                  <circle cx="60" cy="60" r="48" fill="none"
+                    stroke="rgba(113,196,239,.1)" stroke-width="10"/>
+                  <!-- animated fill -->
+                  <circle cx="60" cy="60" r="48" fill="none"
+                    stroke="url(#rg2)" stroke-width="10"
+                    stroke-linecap="round"
+                    transform="rotate(-90 60 60)"
+                    [attr.stroke-dasharray]="301.6"
+                    [attr.stroke-dashoffset]="dashStep >= 1 ? (301.6 - (dashCount / 100) * 301.6) : 301.6"
+                    class="ring-arc"/>
+                  <defs>
+                    <linearGradient id="rg2" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%"   stop-color="#00668c"/>
+                      <stop offset="100%" stop-color="#71c4ef"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- centre text -->
+                  <text x="60" y="53" text-anchor="middle" class="ring-pct">
+                    {{ dashStep >= 1 ? dashCount : 0 }}%
+                  </text>
+                  <text x="60" y="68" text-anchor="middle" class="ring-sub">match</text>
+                </svg>
+                <!-- outer pulse ring when active -->
+                @if (dashStep >= 1) {
+                  <div class="ring-pulse"></div>
+                }
+              </div>
+              <p class="ring-career" [class.career-in]="dashStep >= 1">
+                <span class="career-dot"></span>
+                Frontend Developer
+              </p>
+            </div>
+
+            <!-- ── Income bars ── -->
+            <div class="dash-tile bar-tile" [class.tile-on]="dashStep >= 2">
+              <p class="tile-label">Income Growth</p>
+              <div class="bars">
+                @for (b of incomeBars; track $index; let i = $index) {
+                  <div class="bar-col">
+                    <div class="bar"
+                         [class.bar-grow]="dashStep >= 2"
+                         [style.--bar-h]="b.h"
+                         [style.animation-delay]="(i * 0.09) + 's'">
+                    </div>
+                    <span>{{b.label}}</span>
+                  </div>
+                }
+              </div>
+              <p class="bar-total" [class.total-in]="dashStep >= 2">
+                ${{ dashIncome | number }}
+                <span class="up-badge">↑ 45%</span>
+              </p>
+            </div>
+
+            <!-- ── Roadmap tasks ── -->
+            <div class="dash-tile road-tile" [class.tile-on]="dashStep >= 3">
+              <div class="road-header">
+                <p class="tile-label">30-Day Roadmap</p>
+                <span class="road-pct">
+                  {{ dashStep >= 5 ? 50 : dashStep >= 4 ? 25 : dashStep >= 3 ? 0 : 0 }}%
+                </span>
+              </div>
+
+              <!-- task 1 — done when step >= 3 -->
+              <div class="rs" [class.rs-done]="dashStep >= 3" [class.rs-in]="dashStep >= 3">
+                <svg class="rs-icon" viewBox="0 0 16 16" fill="none">
+                  @if (dashStep >= 3) {
+                    <circle cx="8" cy="8" r="7" fill="#00668c"/>
+                    <path d="M5 8l2 2 4-4" stroke="#fff" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                  } @else {
+                    <circle cx="8" cy="8" r="7" fill="none"
+                      stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+                  }
+                </svg>
+                <span>HTML &amp; CSS Basics</span>
+              </div>
+
+              <!-- task 2 — done when step >= 4 -->
+              <div class="rs" [class.rs-done]="dashStep >= 4" [class.rs-in]="dashStep >= 3">
+                <svg class="rs-icon" viewBox="0 0 16 16" fill="none">
+                  @if (dashStep >= 4) {
+                    <circle cx="8" cy="8" r="7" fill="#00668c"/>
+                    <path d="M5 8l2 2 4-4" stroke="#fff" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                  } @else {
+                    <circle cx="8" cy="8" r="7" fill="none"
+                      stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+                  }
+                </svg>
+                <span>JavaScript Core</span>
+              </div>
+
+              <!-- task 3 — active when step >= 5 -->
+              <div class="rs" [class.rs-active]="dashStep >= 5" [class.rs-in]="dashStep >= 3">
+                <svg class="rs-icon" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="none"
+                    [attr.stroke]="dashStep >= 5 ? '#71c4ef' : 'rgba(255,255,255,.2)'"
+                    stroke-width="1.5"/>
+                  @if (dashStep >= 5) {
+                    <circle cx="8" cy="8" r="3" fill="#71c4ef"/>
+                  }
+                </svg>
+                <span>React Framework</span>
+              </div>
+
+              <!-- task 4 — idle -->
+              <div class="rs rs-in" [class.rs-in]="dashStep >= 3">
+                <svg class="rs-icon" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="none"
+                    stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+                </svg>
+                <span class="rs-idle">First Portfolio Site</span>
+              </div>
+
+            </div>
+          </div><!-- /dash-body -->
+
+          <!-- floating toast -->
+          <div class="dash-toast" [class.toast-show]="dashStep >= 6">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#71c4ef">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            First client earned $150!
+          </div>
+
+        </div><!-- /dash-card -->
+      </div>
+    </div>
+
+    <!-- scroll hint -->
+    <div class="scroll-hint">
+      <div class="scroll-mouse">
+        <div class="scroll-ball"></div>
+      </div>
+      <span>Scroll to explore</span>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ HOW IT WORKS ═══════════ -->
+  <section class="section how-section" id="how-it-works" #howSection>
+    <div class="sec-head" [class.visible]="howVisible">
+      <span class="sec-tag">Process</span>
+      <h2>How SkillToIncome AI Works</h2>
+      <p>From zero to first income in 4 intelligent steps</p>
+    </div>
+
+    <div class="how-diagram" [class.visible]="howVisible">
+
+      <!-- animated progress track -->
+      <div class="how-track">
+        <!-- filled progress bar driven by howStep -->
+        <div class="how-track-fill"
+             [style.width]="howStep === 0 ? '0%' :
+                            howStep === 1 ? '12%' :
+                            howStep === 2 ? '38%' :
+                            howStep === 3 ? '63%' : '100%'">
+        </div>
+        <!-- connector dots between steps -->
+        <div class="how-track-dot htd-1" [class.lit]="howStep >= 1"></div>
+        <div class="how-track-dot htd-2" [class.lit]="howStep >= 2"></div>
+        <div class="how-track-dot htd-3" [class.lit]="howStep >= 3"></div>
+        <div class="how-track-dot htd-4" [class.lit]="howStep >= 4"></div>
+      </div>
+
+      <div class="how-steps-row">
+
+        <!-- STEP 01 -->
+        <div class="how-step" [class.how-active]="howStep === 1"
+             [class.how-done]="howStep > 1" [class.how-idle]="howStep === 0">
+          <div class="how-step-inner">
+            <div class="how-num">01</div>
+            <div class="how-icon-box">
+              <div class="how-icon-ring"></div>
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="4" width="18" height="16" rx="3" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M7 9h10M7 13h6" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="17" cy="17" r="4" fill="#00668c" stroke="#71c4ef" stroke-width="1.2"/>
+                <path d="M16 17l1 1 2-2" stroke="#71c4ef" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <!-- done check overlay -->
+              @if (howStep > 1) {
+                <div class="how-done-check">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              }
+            </div>
+            <div class="how-text">
+              <h3>Assess Your Skills</h3>
+              <p>Add skills, levels and goals. AI maps your current position.</p>
+              <ul class="how-items">
+                @for (item of howSteps[0].items; track item) {
+                  <li [class.item-in]="howStep >= 1">
+                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 6l3 3 5-5" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>{{item}}
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 02 -->
+        <div class="how-step" [class.how-active]="howStep === 2"
+             [class.how-done]="howStep > 2" [class.how-idle]="howStep < 2">
+          <div class="how-step-inner">
+            <div class="how-num">02</div>
+            <div class="how-icon-box">
+              <div class="how-icon-ring"></div>
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M12 8v4l3 2" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="12" cy="12" r="2" fill="#71c4ef"/>
+              </svg>
+              @if (howStep > 2) {
+                <div class="how-done-check">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              }
+            </div>
+            <div class="how-text">
+              <h3>AI Analyzes Market</h3>
+              <p>Real-time scanning to score demand, salary and suitability.</p>
+              <ul class="how-items">
+                @for (item of howSteps[1].items; track item) {
+                  <li [class.item-in]="howStep >= 2">
+                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 6l3 3 5-5" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>{{item}}
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 03 -->
+        <div class="how-step" [class.how-active]="howStep === 3"
+             [class.how-done]="howStep > 3" [class.how-idle]="howStep < 3">
+          <div class="how-step-inner">
+            <div class="how-num">03</div>
+            <div class="how-icon-box">
+              <div class="how-icon-ring"></div>
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                <path d="M9 20H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M3 10h18" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M15 17l2 2 4-4" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              @if (howStep > 3) {
+                <div class="how-done-check">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              }
+            </div>
+            <div class="how-text">
+              <h3>Get Your Roadmap</h3>
+              <p>Receive a personalised AI step-by-step learning plan.</p>
+              <ul class="how-items">
+                @for (item of howSteps[2].items; track item) {
+                  <li [class.item-in]="howStep >= 3">
+                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 6l3 3 5-5" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>{{item}}
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 04 -->
+        <div class="how-step" [class.how-active]="howStep === 4"
+             [class.how-idle]="howStep < 4">
+          <div class="how-step-inner">
+            <div class="how-num">04</div>
+            <div class="how-icon-box">
+              <div class="how-icon-ring"></div>
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="12" cy="12" r="4" fill="#00668c" stroke="#71c4ef" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="how-text">
+              <h3>Start Earning</h3>
+              <p>Launch your freelance profile with AI-generated gig titles.</p>
+              <ul class="how-items">
+                @for (item of howSteps[3].items; track item) {
+                  <li [class.item-in]="howStep >= 4">
+                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 6l3 3 5-5" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>{{item}}
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /how-steps-row -->
+    </div><!-- /how-diagram -->
+  </section>
+  <section class="section features-section" id="features" #featuresSection>
+    <div class="sec-head" [class.visible]="featuresVisible">
+      <span class="sec-tag">Features</span>
+      <h2>Everything You Need to Succeed</h2>
+      <p>9 AI-powered tools built for students and beginners</p>
+    </div>
+
+    <div class="feat-grid" [class.visible]="featuresVisible">
+      @for (f of featureCards; track f.title; let i = $index) {
+        <div class="feat-card" [style.animation-delay]="f.delay">
+          <div class="feat-icon">
+            <!-- 9 unique SVG icons -->
+            @if (i===0) {
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M12 12l8.5-4.9M12 12v9M3.5 7.1L12 12" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            }
+            @if (i===1) {
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M9 20H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M3 10h18" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M15 17l2 2 4-4" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            }
+            @if (i===2) {
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2v4M12 18v4" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="12" cy="12" r="7" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="12" cy="17" r=".5" fill="#71c4ef"/>
+              </svg>
+            }
+            @if (i===3) {
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="#71c4ef" stroke-width="1.5"/>
+                <circle cx="12" cy="10" r="3" stroke="#71c4ef" stroke-width="1.5"/>
+              </svg>
+            }
+            @if (i===4) {
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M18 20V10M12 20V4M6 20v-6" stroke="#71c4ef" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            }
+            @if (i===5) {
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="3" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M3 9h18M9 21V9" stroke="#71c4ef" stroke-width="1.5"/>
+              </svg>
+            }
+            @if (i===6) {
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M8 10h8M8 14h5" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            }
+            @if (i===7) {
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M9 12l2 2 4-4" stroke="#71c4ef" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            }
+            @if (i===8) {
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="7" height="7" rx="1" stroke="#71c4ef" stroke-width="1.5"/>
+                <rect x="14" y="3" width="7" height="7" rx="1" stroke="#71c4ef" stroke-width="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M17.5 17.5m-2 0a2 2 0 104 0 2 2 0 00-4 0" stroke="#71c4ef" stroke-width="1.5"/>
+              </svg>
+            }
+          </div>
+          <div class="feat-body">
+            <div class="feat-top">
+              <h3>{{f.title}}</h3>
+              <span class="feat-tag">{{f.tag}}</span>
+            </div>
+            <p>{{f.desc}}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+
+  <!-- ═══════════ JOURNEY TIMELINE ═══════════ -->
+  <section class="section journey-section" id="journey" #journeySection>
+    <div class="sec-head" [class.visible]="journeyVisible">
+      <span class="sec-tag">Your Journey</span>
+      <h2>From Beginner to Income — Step by Step</h2>
+      <p>A visual timeline of your transformation</p>
+    </div>
+
+    <div class="timeline" [class.visible]="journeyVisible">
+      <!-- vertical SVG spine -->
+      <svg class="tl-spine" viewBox="0 0 4 500" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="spineGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#00668c"/>
+            <stop offset="100%" stop-color="#71c4ef"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="4" height="500" fill="url(#spineGrad)" rx="2" class="spine-bar"/>
+      </svg>
+
+      @for (m of journey; track m.week; let i = $index) {
+        <div class="tl-row" [class.tl-right]="i % 2 !== 0" [style.animation-delay]="m.delay">
+          <div class="tl-card">
+            <div class="tl-week">{{m.week}}</div>
+            <h3>{{m.title}}</h3>
+            <p>{{m.desc}}</p>
+            <div class="tl-outcome">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="#71c4ef" stroke-width="2" stroke-linecap="round"/>
+                <path d="M22 4L12 14.01l-3-3" stroke="#71c4ef" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              {{m.outcome}}
+            </div>
+          </div>
+          <div class="tl-dot">
+            <div class="tl-dot-inner"></div>
+          </div>
+          <div class="tl-spacer"></div>
+        </div>
+      }
+    </div>
+  </section>
+
+
+  <!-- ═══════════ AI SHOWCASE ═══════════ -->
+  <section class="section ai-section" #aiSection>
+    <div class="sec-head" [class.visible]="aiVisible">
+      <span class="sec-tag">AI Engine</span>
+      <h2>Powered by Advanced AI</h2>
+      <p>Real-time analysis of your skills against market demand</p>
+    </div>
+
+    <div class="ai-demo" [class.visible]="aiVisible">
+
+      <!-- ═══ ANIMATED CHAT UI ═══ -->
+      <div class="chat-ui" [class.chat-resetting]="chatReset">
+
+        <!-- header -->
+        <div class="chat-head">
+          <div class="chat-avatar-wrap">
+            <div class="chat-avatar">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="11" width="18" height="11" rx="2" stroke="#71c4ef" stroke-width="1.5"/>
+                <path d="M7 11V7a5 5 0 0110 0v4" stroke="#71c4ef" stroke-width="1.5"/>
+                <circle cx="12" cy="16" r="1.5" fill="#71c4ef"/>
+              </svg>
+            </div>
+            <span class="avatar-ring"></span>
+            <span class="avatar-ring ring2"></span>
+          </div>
+          <div class="chat-head-info">
+            <p class="chat-name">AI Mentor</p>
+            <p class="chat-status">
+              <span class="online-dot"></span> Online · responds instantly
+            </p>
+          </div>
+          <div class="chat-head-badges">
+            <span class="hbadge">GPT-4</span>
+            <span class="hbadge hbadge-green">Live</span>
+          </div>
+        </div>
+
+        <!-- messages body -->
+        <div class="chat-body">
+
+          <!-- msg 1 — user -->
+          @if (chatStep >= 1) {
+            <div class="chat-row user-row slide-right">
+              <div class="bubble user-bubble">
+                What should I learn first as a complete beginner?
+              </div>
+              <span class="msg-tick">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <path d="M20 6L9 17l-5-5" stroke="#71c4ef" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          }
+
+          <!-- typing 1 -->
+          @if (chatStep === 2) {
+            <div class="chat-row slide-left">
+              <div class="ai-msg-avatar">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="11" width="18" height="11" rx="2" stroke="#71c4ef" stroke-width="1.5"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4" stroke="#71c4ef" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <div class="typing-bubble"><span></span><span></span><span></span></div>
+            </div>
+          }
+
+          <!-- msg 2 — AI -->
+          @if (chatStep >= 3) {
+            <div class="chat-row slide-left">
+              <div class="ai-msg-avatar">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="11" width="18" height="11" rx="2" stroke="#71c4ef" stroke-width="1.5"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4" stroke="#71c4ef" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <div class="bubble ai-bubble">
+                <span class="ai-tag">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="#71c4ef">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                  AI Analysis
+                </span>
+                Based on your profile: <b>HTML/CSS → JavaScript → React</b> is ideal.
+                I've updated your roadmap with daily tasks.
+                <div class="bubble-chips">
+                  <span class="bchip">🗺️ Roadmap updated</span>
+                  <span class="bchip">📚 12 resources added</span>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- msg 3 — user -->
+          @if (chatStep >= 4) {
+            <div class="chat-row user-row slide-right">
+              <div class="bubble user-bubble">
+                How do I get my first freelance client?
+              </div>
+              <span class="msg-tick">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <path d="M20 6L9 17l-5-5" stroke="#71c4ef" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          }
+
+          <!-- typing 2 -->
+          @if (chatStep === 5) {
+            <div class="chat-row slide-left">
+              <div class="ai-msg-avatar">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="11" width="18" height="11" rx="2" stroke="#71c4ef" stroke-width="1.5"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4" stroke="#71c4ef" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <div class="typing-bubble"><span></span><span></span><span></span></div>
+            </div>
+          }
+
+          <!-- msg 4 — AI -->
+          @if (chatStep >= 6) {
+            <div class="chat-row slide-left">
+              <div class="ai-msg-avatar">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="11" width="18" height="11" rx="2" stroke="#71c4ef" stroke-width="1.5"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4" stroke="#71c4ef" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <div class="bubble ai-bubble">
+                <span class="ai-tag">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="#71c4ef">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                  Freelance Strategy
+                </span>
+                Start with <b>Fiverr</b> — your skills fit <b>"Landing Page Design"</b> perfectly.
+                I've written 3 gig titles for you.
+                <div class="bubble-chips">
+                  <span class="bchip bchip-green">🎯 3 gig titles ready</span>
+                  <span class="bchip">💰 Est. $200–$500/mo</span>
+                </div>
+              </div>
+            </div>
+          }
+
+        </div><!-- /chat-body -->
+
+        <!-- input bar -->
+        <div class="chat-foot">
+          <div class="chat-input-wrap">
+            <span class="chat-placeholder">Ask your AI mentor anything…</span>
+            <span class="cursor-blink">|</span>
+          </div>
+          <button class="send-btn" aria-label="Send">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+      </div><!-- /chat-ui -->
+
+      <!-- AI Analysis cards -->
+      <div class="ai-cards">
+        @for (c of aiCards; track c.title) {
+          <div class="ai-card" [style.animation-delay]="c.delay">
+            <div class="ai-card-label">{{c.title}}</div>
+            <div class="ai-card-value">{{c.value}}</div>
+            <div class="ai-bar-track">
+              <div class="ai-bar-fill" [style.width]="c.pct+'%'"></div>
+            </div>
+            <div class="ai-pct">{{c.pct}}%</div>
+          </div>
+        }
+
+        <!-- SVG radar — fully animated -->
+        <div class="ai-card radar-card">
+          <div class="radar-header">
+            <p class="ai-card-label">Skill Radar</p>
+            <span class="radar-live"><span class="radar-live-dot"></span>Live</span>
+          </div>
+
+          <div class="radar-wrap">
+            <svg class="radar-svg" viewBox="0 0 200 200" aria-label="Animated skill radar chart">
+              <defs>
+                <!-- glow filter -->
+                <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <!-- strong glow for shape -->
+                <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="5" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <!-- scan sweep gradient -->
+                <radialGradient id="scanGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%"   stop-color="#71c4ef" stop-opacity="0.18"/>
+                  <stop offset="70%"  stop-color="#71c4ef" stop-opacity="0.04"/>
+                  <stop offset="100%" stop-color="#71c4ef" stop-opacity="0"/>
+                </radialGradient>
+                <!-- shape fill gradient -->
+                <radialGradient id="shapeFill" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%"   stop-color="#71c4ef" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#00668c" stop-opacity="0.10"/>
+                </radialGradient>
+                <!-- shimmer gradient -->
+                <linearGradient id="shimmer" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%"   stop-color="#71c4ef" stop-opacity="0"/>
+                  <stop offset="45%"  stop-color="#71c4ef" stop-opacity="0.35"/>
+                  <stop offset="55%"  stop-color="#fff"    stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#71c4ef" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+
+              <!-- ── grid rings (3 hexagons) ── -->
+              <polygon class="grid-hex grid-hex-3"
+                points="100,25 159,62 159,138 100,175 41,138 41,62"
+                fill="rgba(0,102,140,.10)" stroke="rgba(113,196,239,.20)" stroke-width="1"/>
+              <polygon class="grid-hex grid-hex-2"
+                points="100,47 140,71 140,129 100,153 60,129 60,71"
+                fill="rgba(0,102,140,.08)" stroke="rgba(113,196,239,.14)" stroke-width="1"/>
+              <polygon class="grid-hex grid-hex-1"
+                points="100,69 121,81 121,119 100,131 79,119 79,81"
+                fill="rgba(0,102,140,.05)" stroke="rgba(113,196,239,.09)" stroke-width="1"/>
+
+              <!-- ── axis lines ── -->
+              <line x1="100" y1="100" x2="100" y2="25"  stroke="rgba(113,196,239,.12)" stroke-width="1" class="axis-line"/>
+              <line x1="100" y1="100" x2="159" y2="62"  stroke="rgba(113,196,239,.12)" stroke-width="1" class="axis-line"/>
+              <line x1="100" y1="100" x2="159" y2="138" stroke="rgba(113,196,239,.12)" stroke-width="1" class="axis-line"/>
+              <line x1="100" y1="100" x2="100" y2="175" stroke="rgba(113,196,239,.12)" stroke-width="1" class="axis-line"/>
+              <line x1="100" y1="100" x2="41"  y2="138" stroke="rgba(113,196,239,.12)" stroke-width="1" class="axis-line"/>
+              <line x1="100" y1="100" x2="41"  y2="62"  stroke="rgba(113,196,239,.12)" stroke-width="1" class="axis-line"/>
+
+              <!-- ── rotating scan sweep ── -->
+              <g class="scan-group">
+                <polygon points="100,100 100,25 159,62"
+                  fill="url(#scanGrad)" opacity="0.6"/>
+              </g>
+
+              <!-- ── skill shape (draws in then breathes) ── -->
+              <polygon class="skill-shape"
+                points="100,33 152,62 148,138 100,165 50,132 44,64"
+                fill="url(#shapeFill)"
+                stroke="#71c4ef" stroke-width="2"
+                filter="url(#glow2)"/>
+
+              <!-- ── shimmer sweep over shape ── -->
+              <polygon class="shimmer-sweep"
+                points="100,33 152,62 148,138 100,165 50,132 44,64"
+                fill="url(#shimmer)" opacity="0"/>
+
+              <!-- ── vertex dots ── -->
+              <!-- HTML - top -->
+              <circle class="v-dot" cx="100" cy="33"  r="4" fill="#71c4ef" filter="url(#glow)" style="animation-delay:0s"/>
+              <!-- CSS - top right -->
+              <circle class="v-dot" cx="152" cy="62"  r="4" fill="#71c4ef" filter="url(#glow)" style="animation-delay:.15s"/>
+              <!-- JS - bottom right -->
+              <circle class="v-dot" cx="148" cy="138" r="4" fill="#71c4ef" filter="url(#glow)" style="animation-delay:.30s"/>
+              <!-- React - bottom -->
+              <circle class="v-dot" cx="100" cy="165" r="4" fill="#71c4ef" filter="url(#glow)" style="animation-delay:.45s"/>
+              <!-- Node - bottom left -->
+              <circle class="v-dot" cx="50"  cy="132" r="4" fill="#71c4ef" filter="url(#glow)" style="animation-delay:.60s"/>
+              <!-- Git - top left -->
+              <circle class="v-dot" cx="44"  cy="64"  r="4" fill="#71c4ef" filter="url(#glow)" style="animation-delay:.75s"/>
+
+              <!-- ── dot outer pulse rings ── -->
+              <circle class="v-ring" cx="100" cy="33"  r="7" style="animation-delay:0s"/>
+              <circle class="v-ring" cx="152" cy="62"  r="7" style="animation-delay:.15s"/>
+              <circle class="v-ring" cx="148" cy="138" r="7" style="animation-delay:.30s"/>
+              <circle class="v-ring" cx="100" cy="165" r="7" style="animation-delay:.45s"/>
+              <circle class="v-ring" cx="50"  cy="132" r="7" style="animation-delay:.60s"/>
+              <circle class="v-ring" cx="44"  cy="64"  r="7" style="animation-delay:.75s"/>
+
+              <!-- ── axis labels ── -->
+              <text x="100" y="18"  text-anchor="middle" class="rl">HTML</text>
+              <text x="170" y="64"  text-anchor="start"  class="rl">CSS</text>
+              <text x="170" y="142" text-anchor="start"  class="rl">JS</text>
+              <text x="100" y="190" text-anchor="middle" class="rl">React</text>
+              <text x="30"  y="142" text-anchor="end"    class="rl">Node</text>
+              <text x="30"  y="64"  text-anchor="end"    class="rl">Git</text>
+
+              <!-- ── center pulse ── -->
+              <circle class="center-pulse" cx="100" cy="100" r="5" fill="#71c4ef"/>
+              <circle class="center-ring"  cx="100" cy="100" r="5" fill="none" stroke="#71c4ef" stroke-width="1.5"/>
+            </svg>
+
+            <!-- skill % badges that float around the radar -->
+            <div class="skill-badge sb-html">HTML<b>92%</b></div>
+            <div class="skill-badge sb-css">CSS<b>88%</b></div>
+            <div class="skill-badge sb-js">JS<b>76%</b></div>
+            <div class="skill-badge sb-react">React<b>68%</b></div>
+            <div class="skill-badge sb-node">Node<b>55%</b></div>
+            <div class="skill-badge sb-git">Git<b>80%</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ STATS ═══════════ -->
+  <section class="section stats-section" id="stats" #statsSection>
+    <div class="stats-grid" [class.visible]="statsVisible">
+      @for (s of stats; track s.label) {
+        <div class="stat-card" [style.animation-delay]="s.delay">
+          <div class="stat-val">{{s.value}}</div>
+          <div class="stat-lbl">{{s.label}}</div>
+          <div class="stat-desc">{{s.desc}}</div>
+        </div>
+      }
+    </div>
+  </section>
+
+
+  <!-- ═══════════ TESTIMONIALS ═══════════ -->
+  <section class="section testi-section" #testimonialsSection>
+    <div class="sec-head" [class.visible]="testimonialsVisible">
+      <span class="sec-tag">Success Stories</span>
+      <h2>Students Who Made It</h2>
+    </div>
+    <div class="testi-grid" [class.visible]="testimonialsVisible">
+      @for (t of testimonials; track t.name) {
+        <div class="testi-card" [style.animation-delay]="t.delay">
+          <div class="testi-stars">
+            @for (_ of [1,2,3,4,5]; track $index) {
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#71c4ef">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            }
+          </div>
+          <p class="testi-text">"{{t.text}}"</p>
+          <div class="testi-author">
+            <div class="testi-av">{{t.name[0]}}</div>
+            <div>
+              <strong>{{t.name}}</strong>
+              <span>{{t.role}} · <b>{{t.income}}</b></span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+
+  <!-- ═══════════ CTA ═══════════ -->
+  <section class="section cta-section" #ctaSection>
+    <div class="cta-glow"></div>
+    <div class="cta-body" [class.visible]="ctaVisible">
+      <span class="sec-tag">Free Forever · No Credit Card</span>
+      <h2>Ready to Turn Your Skills<br>Into Real Income?</h2>
+      <p>Join 10,000+ students who started their journey today</p>
+      <div class="cta-btns">
+        <a routerLink="/auth/register" class="btn-primary large">
+          Start Your Free Journey
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a routerLink="/auth/login" class="btn-outline">Sign In</a>
+      </div>
+      <p class="cta-note">🔒 No risk · Cancel anytime · Free plan always available</p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand-mark sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#71c4ef"/>
+          </svg>
+        </div>
+        <span>SkillToIncome AI</span>
+      </div>
+      <div class="footer-links">
+        <span>Features</span><span>Roadmaps</span><span>Pricing</span><span>Blog</span>
+      </div>
+    </div>
+    <p class="footer-copy">© 2025 SkillToIncome AI · Built for students worldwide</p>
+  </footer>
+
+</div>

@@ -1,0 +1,65 @@
+app:
+  name: "AI Coding Agent"
+  version: "1.0.0"
+  debug: true
+
+# LLM Configuration
+llm:
+  provider: "openrouter"
+  openrouter_api_key: ""        # Set in .env: OPENROUTER_API_KEY
+  openrouter_base_url: "https://openrouter.ai/api/v1"
+  openrouter_model: "nvidia/nemotron-3-super-120b-a12b:free"   # 120B free model — working
+  ollama_base_url: "http://localhost:11434"
+  ollama_model: "codellama:13b"
+  max_tokens: 8192
+  temperature: 0.2
+
+# Embeddings
+embeddings:
+  model: "BAAI/bge-small-en-v1.5"
+  device: "cpu"                 # "cpu" | "cuda"
+  batch_size: 32
+  chunk_size: 1500              # chars per chunk
+  chunk_overlap: 200
+
+# Qdrant Vector DB
+qdrant:
+  host: "localhost"
+  port: 6333
+  collection: "code_index"
+  in_memory: true               # true = no separate Qdrant server needed
+
+# Indexer
+indexer:
+  supported_extensions:
+    - ".py"
+    - ".ts"
+    - ".js"
+    - ".tsx"
+    - ".jsx"
+    - ".html"
+    - ".css"
+    - ".scss"
+    - ".json"
+    - ".yaml"
+    - ".yml"
+    - ".md"
+    - ".toml"
+    - ".env.example"
+  ignore_dirs:
+    - "node_modules"
+    - "dist"
+    - "build"
+    - ".git"
+    - "__pycache__"
+    - ".angular"
+    - "venv"
+    - ".venv"
+    - ".cache"
+    - "coverage"
+  max_file_size_kb: 500
+
+# Retrieval
+retrieval:
+  top_k: 8                      # chunks to retrieve
+  score_threshold: 0.3
