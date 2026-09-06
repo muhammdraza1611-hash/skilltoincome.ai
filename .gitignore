@@ -10,9 +10,7 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -54,6 +52,9 @@ dist/
 dist-ssr/
 .angular/
 .cache/
+# Only ignore top-level build output, not Angular source build folder
+/build/
+frontend/dist/
 
 # IDEs
 .vscode/
